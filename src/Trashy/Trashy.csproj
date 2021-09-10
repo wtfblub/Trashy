@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <VTubeStudioPath></VTubeStudioPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="$(VTubeStudioPath)\BepInEx\core\BepInEx.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\Assembly-CSharp.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.CoreModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.ImageConversionModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.InputLegacyModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.PhysicsModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.UI.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.UIModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\Unity.TextMeshPro.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.IMGUIModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.AssetBundleModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.PubSub.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Helix.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Helix.Models.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.V5.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.V5.Models.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Core.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Core.Enums.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Core.Interfaces.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Core.Models.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\Microsoft.Extensions.Logging.Abstractions.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\Newtonsoft.Json.dll" Private="False" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Trashy.png" />
+  </ItemGroup>
+
+</Project>
