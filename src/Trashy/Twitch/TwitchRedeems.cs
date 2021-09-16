@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using BepInEx;
 using TwitchLib.PubSub;
 using TwitchLib.PubSub.Events;
 using UnityEngine;
@@ -130,7 +131,7 @@ namespace Trashy.Twitch
         private void OnRewardRedeemed(object sender, OnRewardRedeemedArgs e)
         {
             if (e.RewardTitle.Equals(ConfigManager.RewardName.Value, StringComparison.OrdinalIgnoreCase))
-                _itemSpawner.SpawnTrash();
+                ThreadingHelper.Instance.StartSyncInvoke(() => _itemSpawner.SpawnTrash());
 
             Log.Info<TwitchRedeems>(e.RewardTitle);
         }
