@@ -57,12 +57,12 @@ namespace Trashy
             var configTabSelector = GameObject.Find("ConfigTabSelector");
 
             _configSelectorIcon = Instantiate(iconTemplate, configTabSelector.transform, true);
-            _configSelectorIcon.transform.position = new Vector3(-64.5f, 53.7468f, 100);
+            _configSelectorIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(293.76f, -6.3997f);
             _configSelectorIcon.name = "Trashy: Icon";
             _configSelectorIcon.GetComponent<Image>().sprite = GetComponent<SpriteManager>().Icon;
 
             _configSelectorButton = Instantiate(buttonTemplate, configTabSelector.transform, true);
-            _configSelectorButton.transform.position = new Vector3(-64.5f, 53.7468f, 100);
+            _configSelectorButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(293.76f, -6.3997f);
             _configSelectorButton.name = "Trashy: Button";
 
             // Destroy the cloned button because it contains persistent event callbacks that cant be removed
