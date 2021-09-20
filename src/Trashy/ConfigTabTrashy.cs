@@ -47,7 +47,12 @@ namespace Trashy
             if (UIManager.Skin != null)
                 GUI.skin = UIManager.Skin;
 
-            GUI.Window(0, new Rect(Screen.width - 520, 100, 430, 400), DrawConfigWindow, "Trashy Configuration");
+            GUI.Window(
+                0,
+                new Rect(Screen.width - 520, 100, 430, 400),
+                DrawConfigWindow,
+                $"Trashy Configuration - {TrashyPlugin.Version}"
+            );
         }
 
         private void Update()

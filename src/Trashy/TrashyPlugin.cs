@@ -6,9 +6,11 @@ using UnityEngine;
 
 namespace Trashy
 {
-    [BepInPlugin("TrashyPlugin", "Throw trash at the VTuber", "0.1.0.0")]
+    [BepInPlugin("TrashyPlugin", "Throw trash at the VTuber", Version)]
     public class TrashyPlugin : BaseUnityPlugin
     {
+        public const string Version = "0.1.2";
+
         public static AssetBundle Bundle;
         public static VTubeStudioModelLoader ModelLoader;
         public static VTubeStudioModel Model;
