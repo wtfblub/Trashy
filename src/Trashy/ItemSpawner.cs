@@ -10,12 +10,11 @@ namespace Trashy
         private readonly SlowHeadFinder _headFinder;
         private readonly SpriteManager _spriteManager;
 
-        private VTubeStudioModelLoader ModelLoader => TrashyPlugin.ModelLoader;
-        private VTubeStudioModel Model => TrashyPlugin.Model;
+        private static VTubeStudioModelLoader ModelLoader => TrashyPlugin.ModelLoader;
 
         public ItemSpawner()
         {
-            _headFinder = gameObject.AddComponent<SlowHeadFinder>();
+            _headFinder = gameObject.GetComponent<SlowHeadFinder>();
             _spriteManager = GetComponent<SpriteManager>();
         }
 
@@ -31,16 +30,11 @@ namespace Trashy
                 count = ConfigManager.ObjectCount.Value;
 
             var modelPosition = ModelLoader.ModelTransformController.transform.position;
-            _headFinder.FindHead(
-                ModelLoader,
-                pos =>
-                {
-                    SpawnTrash(
-                        new Vector3(modelPosition.x, modelPosition.y, 20),
-                        new Vector3(Model.ModelDistanceScaleTransform.transform.position.x, pos.y, pos.z),
-                        count
-                    );
-                }
+            var head = _headFinder.GetHead();
+            SpawnTrash(
+                new Vector3(modelPosition.x, modelPosition.y, 20),
+                head,
+                count
             );
         }
 

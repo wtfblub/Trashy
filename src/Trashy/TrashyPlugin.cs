@@ -9,17 +9,20 @@ namespace Trashy
     [BepInPlugin("TrashyPlugin", "Throw trash at the VTuber", Version)]
     public class TrashyPlugin : BaseUnityPlugin
     {
-        public const string Version = "0.1.2";
+        public const string Version = "0.1.3";
 
         public static AssetBundle Bundle;
         public static VTubeStudioModelLoader ModelLoader;
         public static VTubeStudioModel Model;
+
+        private readonly SlowHeadFinder _headFinder;
 
         public TrashyPlugin()
         {
             gameObject.AddComponent<SpriteManager>();
             gameObject.AddComponent<TwitchRedeems>();
             gameObject.AddComponent<UIManager>();
+            _headFinder = gameObject.AddComponent<SlowHeadFinder>();
             gameObject.AddComponent<ItemSpawner>();
 
             Config.SaveOnConfigSet = true;
@@ -104,6 +107,10 @@ namespace Trashy
                 collider.convex = true;
                 collider.sharedMesh = meshFilter.sharedMesh;
             }
+
+            Log.Info("Finding head");
+            yield return _headFinder.FindHeadAsync();
+            Log.Info("Found head");
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,28 +5,24 @@ namespace Trashy
 {
     public class SlowHeadFinder : MonoBehaviour
     {
-        private float _lastSearch;
-        private Vector3 _lastPosition;
-        private bool _isRunning;
+        private float? _distanceY;
 
-        public TimeSpan CacheDuration { get; set; } = TimeSpan.FromSeconds(5);
-
-        public void FindHead(VTubeStudioModelLoader modelLoader, Action<Vector3> onFinished)
+        public Vector3 GetHead()
         {
-            if (_isRunning || Time.realtimeSinceStartup - _lastSearch < CacheDuration.TotalSeconds)
-            {
-                onFinished(_lastPosition);
-                return;
-            }
+            var modelTransform = TrashyPlugin.ModelLoader.ModelTransformController.transform;
+            var position = modelTransform.position;
 
-            _isRunning = true;
-            StartCoroutine(FindHeadAsync(modelLoader, onFinished));
+            if (_distanceY == null)
+                return position;
+
+            return new Vector3(position.x, position.y + _distanceY.Value * modelTransform.localScale.y, position.z);
         }
 
-        private IEnumerator FindHeadAsync(VTubeStudioModelLoader modelLoader, Action<Vector3> onFinished)
+        public IEnumerator FindHeadAsync()
         {
-            var model = modelLoader.VTubeStudioModel();
-            var modelTransform = modelLoader.ModelTransformController.transform;
+            _distanceY = null;
+            var model = TrashyPlugin.Model;
+            var modelTransform = TrashyPlugin.ModelLoader.ModelTransformController.transform;
             var scale = modelTransform.localScale.x;
             var position = modelTransform.position;
 
@@ -37,10 +32,8 @@ namespace Trashy
                 yield return new WaitForEndOfFrame();
             }
 
-            _lastSearch = Time.realtimeSinceStartup;
-            _lastPosition = position;
-            _isRunning = false;
-            onFinished(position);
+            // Get Y distance on 1.0 scale
+            _distanceY = (position.y - modelTransform.position.y) / modelTransform.localScale.y;
         }
     }
 }
