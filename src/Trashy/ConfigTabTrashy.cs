@@ -111,7 +111,7 @@ namespace Trashy
                     );
                     ConfigManager.SpriteSize.Value =
                         Mathf.RoundToInt(
-                            GUILayout.HorizontalSlider(ConfigManager.SpriteSize.Value, 512, 1280)
+                            GUILayout.HorizontalSlider(ConfigManager.SpriteSize.Value, 512, 6400)
                         );
                 }
                 GUILayout.EndVertical();
