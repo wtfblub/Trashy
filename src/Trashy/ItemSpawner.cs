@@ -54,6 +54,10 @@ namespace Trashy
 
                 go.AddComponent<DestroyOutOfBounds>();
 
+                var isSticky = ConfigManager.StickyChance.Value > 0 && Random.Range(1, 101) <= ConfigManager.StickyChance.Value;
+                if (isSticky)
+                    go.AddComponent<Sticky>();
+
                 var renderer = go.AddComponent<SpriteRenderer>();
                 renderer.sprite = sprite;
                 renderer.sortingOrder = 1100;
@@ -66,13 +70,16 @@ namespace Trashy
 
                 var rigidbody = go.AddComponent<Rigidbody>();
                 rigidbody.mass = 500;
+                rigidbody.constraints = isSticky ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
 
                 var modelTransform = ModelLoader.ModelTransformController.transform;
                 var scale = modelTransform.localScale.x;
                 targetPosition -= new Vector3(0, Random.Range(0, 10) * scale, 0);
                 var direction = (targetPosition - go.transform.position).normalized;
                 rigidbody.AddForce(direction.x * 400, direction.y * 400, direction.z * 400, ForceMode.VelocityChange);
-                rigidbody.AddTorque(new Vector3(100, 100, 100), ForceMode.VelocityChange);
+
+                if (!isSticky)
+                    rigidbody.AddTorque(new Vector3(100, 100, 100), ForceMode.VelocityChange);
 
                 // Ignore colliders we just spawned
                 foreach (var colliderToIgnore in colliders)

@@ -110,8 +110,53 @@ namespace Trashy
                         new GUIStyle(GUI.skin.label) { padding = new RectOffset(100, 0, 0, 0) }
                     );
                     ConfigManager.SpriteSize.Value =
-                        Mathf.RoundToInt(
+                        32 * (Mathf.RoundToInt(
                             GUILayout.HorizontalSlider(ConfigManager.SpriteSize.Value, 512, 6400)
+                        ) / 32);
+                }
+                GUILayout.EndVertical();
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Label(
+                    "Sticky Chance:",
+                    new GUIStyle(GUI.skin.label) { padding = new RectOffset(0, 0, 10, 0) },
+                    GUILayout.Width(150)
+                );
+                GUILayout.BeginVertical();
+                {
+                    GUILayout.Label(
+                        $"{ConfigManager.StickyChance.Value}%",
+                        new GUIStyle(GUI.skin.label) { padding = new RectOffset(100, 0, 0, 0) }
+                    );
+                    ConfigManager.StickyChance.Value =
+                        Mathf.RoundToInt(
+                            GUILayout.HorizontalSlider(ConfigManager.StickyChance.Value, 0, 100)
+                        );
+                }
+                GUILayout.EndVertical();
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Label(
+                    "Sticky Duration:",
+                    new GUIStyle(GUI.skin.label) { padding = new RectOffset(0, 0, 10, 0) },
+                    GUILayout.Width(150)
+                );
+                GUILayout.BeginVertical();
+                {
+                    GUILayout.Label(
+                        $"{ConfigManager.StickyDuration.Value} seconds",
+                        new GUIStyle(GUI.skin.label) { padding = new RectOffset(100, 0, 0, 0) }
+                    );
+                    ConfigManager.StickyDuration.Value =
+                        (float)System.Math.Round(
+                            GUILayout.HorizontalSlider(ConfigManager.StickyDuration.Value, 0.3f, 2f),
+                            1
                         );
                 }
                 GUILayout.EndVertical();
