@@ -177,8 +177,6 @@ namespace Trashy
         {
             using (var request = UnityWebRequest.Get("https://api.github.com/repos/wtfblub/trashy/releases"))
             {
-                var a = request.GetRequestHeader("ser-agent");
-                Log.Info(a);
                 yield return request.SendWebRequest();
 
                 if (request.result == UnityWebRequest.Result.Success)
