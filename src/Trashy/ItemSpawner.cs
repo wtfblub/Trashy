@@ -38,7 +38,7 @@ namespace Trashy
             );
         }
 
-        private void SpawnTrash(Vector3 position, Vector3 targetPosition, int count)
+        private void SpawnTrash(Vector3 position, Vector3 headPosition, int count)
         {
             var colliders = new List<Collider>();
             for (var i = 0; i < count; ++i)
@@ -74,8 +74,8 @@ namespace Trashy
 
                 var modelTransform = ModelLoader.ModelTransformController.transform;
                 var scale = modelTransform.localScale.x;
-                targetPosition -= new Vector3(0, Random.Range(0, 10) * scale, 0);
-                var direction = (targetPosition - go.transform.position).normalized;
+                var target = headPosition - new Vector3(0, Random.Range(0, 20) * scale, 0);
+                var direction = (target - go.transform.position).normalized;
                 rigidbody.AddForce(direction.x * 400, direction.y * 400, direction.z * 400, ForceMode.VelocityChange);
 
                 if (!isSticky)
