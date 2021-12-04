@@ -13,7 +13,7 @@ namespace Trashy
     [BepInPlugin("TrashyPlugin", "Throw trash at the VTuber", Version)]
     public class TrashyPlugin : BaseUnityPlugin
     {
-        public const string Version = "0.1.5";
+        public const string Version = "0.2.0";
 
         public static AssetBundle Bundle;
         public static VTubeStudioModelLoader ModelLoader;
@@ -66,6 +66,18 @@ namespace Trashy
                 "StickyDuration",
                 0.5f,
                 "The duration in seconds how long a sticky item sticks"
+            );
+            ConfigManager.ManipulateModel = Config.Bind(
+                "General",
+                "ManipulateModel",
+                true,
+                "Whether the model should react to items or not"
+            );
+            ConfigManager.ManipulateModelPower = Config.Bind(
+                "General",
+                "ManipulateModelPower",
+                40,
+                "How strong the model reacts to items"
             );
             Physics.gravity = new Vector3(0, -100, 0);
 
@@ -168,6 +180,7 @@ namespace Trashy
             }
 
             Log.Info("Finding head");
+            yield return new WaitForSeconds(5);
             yield return _headFinder.FindHeadAsync();
 
             Log.Info("Found head");

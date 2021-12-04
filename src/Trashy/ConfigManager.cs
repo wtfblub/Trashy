@@ -10,5 +10,7 @@ namespace Trashy
         public static ConfigEntry<string> TwitchToken;
         public static ConfigEntry<int> StickyChance;
         public static ConfigEntry<float> StickyDuration;
+        public static ConfigEntry<bool> ManipulateModel;
+        public static ConfigEntry<int> ManipulateModelPower;
     }
 }

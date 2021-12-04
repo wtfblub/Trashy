@@ -163,6 +163,47 @@ namespace Trashy
             }
             GUILayout.EndHorizontal();
 
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Label(
+                    "Model reaction:",
+                    new GUIStyle(GUI.skin.label) { padding = new RectOffset(0, 0, 10, 0) },
+                    GUILayout.Width(150)
+                );
+                GUILayout.BeginVertical();
+                {
+                    if (GUILayout.Button(ConfigManager.ManipulateModel.Value ? "on" : "off", GUILayout.Width(35)))
+                        ConfigManager.ManipulateModel.Value = !ConfigManager.ManipulateModel.Value;
+                }
+                GUILayout.EndVertical();
+            }
+            GUILayout.EndHorizontal();
+
+            if (ConfigManager.ManipulateModel.Value)
+            {
+                GUILayout.BeginHorizontal();
+                {
+                    GUILayout.Label(
+                        "      Reaction power:",
+                        new GUIStyle(GUI.skin.label) { padding = new RectOffset(0, 0, 10, 0) },
+                        GUILayout.Width(150)
+                    );
+                    GUILayout.BeginVertical();
+                    {
+                        GUILayout.Label(
+                            $"{ConfigManager.ManipulateModelPower.Value}",
+                            new GUIStyle(GUI.skin.label) { padding = new RectOffset(100, 0, 0, 0) }
+                        );
+                        ConfigManager.ManipulateModelPower.Value =
+                            5 * (Mathf.RoundToInt(
+                                GUILayout.HorizontalSlider(ConfigManager.ManipulateModelPower.Value, 10, 100)
+                            ) / 5);
+                    }
+                    GUILayout.EndVertical();
+                }
+                GUILayout.EndHorizontal();
+            }
+
             GUILayout.Space(5);
             if (GUILayout.Button("Reload Items"))
                 _spriteManager.Load();

@@ -40,19 +40,46 @@ namespace Trashy
 
         private void SpawnTrash(Vector3 position, Vector3 headPosition, int count)
         {
+            var viewport = ModelLoader.Live2DCamera.WorldToViewportPoint(headPosition);
+            var spawnAdjustmentRange = new Vector3(-100, 100);
+            var layer = 9; // 9=UI LAYER, 8=live2d layer
+
+            // Adjust spawn position and layer depending if the model is on the far left or right of the screen
+            // example: Items should only spawn on the left if the model is on the far right
+            // Regarding layer: the live2d layer looks much better when the model is on the border of the screen
+            // because of weird camera angles
+
+            if (viewport.x >= 0.8f)
+                spawnAdjustmentRange = new Vector3(-100, 0);
+
+            if (viewport.x >= 0.9f)
+                layer = 8;
+
+            if (viewport.x <= 0.2f)
+                spawnAdjustmentRange = new Vector2(0, 100);
+
+            if (viewport.x <= 0.1f)
+                layer = 8;
+
             var colliders = new List<Collider>();
             for (var i = 0; i < count; ++i)
             {
                 var go = new GameObject();
-                go.layer = 9; // UI LAYER
+                go.layer = layer;
 
                 var sprite = _spriteManager.Items.Random();
                 var textureSize = Math.Min(sprite.texture.width, sprite.texture.height);
                 var textureScale = ConfigManager.SpriteSize.Value / textureSize;
                 go.transform.localScale = new Vector3(textureScale, textureScale, 1);
-                go.transform.position = position + new Vector3(Random.Range(-100, 0), Random.Range(-20, 20), 0);
+                go.transform.position = position + new Vector3(
+                    Random.Range(spawnAdjustmentRange.x, spawnAdjustmentRange.y),
+                    Random.Range(-20, 20), 0
+                );
 
                 go.AddComponent<DestroyOutOfBounds>();
+
+                if (ConfigManager.ManipulateModel.Value)
+                    go.AddComponent<ManipulateModel>();
 
                 var isSticky = ConfigManager.StickyChance.Value > 0 && Random.Range(1, 101) <= ConfigManager.StickyChance.Value;
                 if (isSticky)
