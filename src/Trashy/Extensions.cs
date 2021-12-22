@@ -53,7 +53,13 @@ namespace Trashy
         static VTubeStudioModelExtensions()
         {
             s_setRaycastableMethodInfo = typeof(VTubeStudioModel)
-                .GetMethod("SetModelRaycastable", BindingFlags.Instance | BindingFlags.NonPublic);
+                .GetMethod("SetRaycastable", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            if (s_setRaycastableMethodInfo == null)
+            {
+                s_setRaycastableMethodInfo = typeof(VTubeStudioModel)
+                    .GetMethod("SetModelRaycastable", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
 
             if (s_setRaycastableMethodInfo == null)
                 Log.Error($"Unable to find method 'SetModelRaycastable' on {nameof(VTubeStudioModel)}");
