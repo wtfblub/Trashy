@@ -1,7 +1,7 @@
 # Trashy
 A [VTube Studio](https://denchisoft.com/) mod that lets your Twitch Viewers throw items at you.
 
-![Preview](https://github.com/wtfblub/Trashy/raw/dev/media/preview.gif)
+![Preview](https://github.com/wtfblub/Trashy/raw/dev/media/preview.gif?)
 
 
 ## Installation
@@ -34,13 +34,13 @@ Open VTube Studio and go to the settings, you should find the new Trashy Icon on
 
 Clicking on it should open up the configuration window:
 
-![](https://github.com/wtfblub/Trashy/raw/dev/media/trashy_config.png)
+![](https://github.com/wtfblub/Trashy/raw/dev/media/trashy_config.png?)
 
 Click on `Connect with Twitch` it should open a tab in your browser where you can login and connect your Twitch account.
 
 After logging in it should look like this:
 
-![](https://github.com/wtfblub/Trashy/raw/dev/media/trashy_config_loggedin.png)
+![](https://github.com/wtfblub/Trashy/raw/dev/media/trashy_config_loggedin.png?)
 
 
 ## Settings
@@ -49,7 +49,7 @@ After logging in it should look like this:
 
 - *Model reaction:* If your model should react to items hitting
 
-![](https://github.com/wtfblub/Trashy/raw/dev/media/preview.gif)
+![](https://github.com/wtfblub/Trashy/raw/dev/media/preview.gif?)
 
 - *Reaction power:* How strong your model will react
 
@@ -66,6 +66,7 @@ Click on `Add trigger` and choose the type of trigger you want.
 
 - **Redeem:** A channel points redeem
   * Go into your Twitch Dashboard and create a `Channel points reward` then put the exact same name for the Reward into the `Redeem Name` field in the Trashy settings
+  
   ![](https://github.com/wtfblub/Trashy/raw/dev/media/trashy_config_trigger_redeem.png)
 
 - **Bits:** A bits donation
