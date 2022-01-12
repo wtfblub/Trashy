@@ -1,11 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Trashy
+namespace Trashy.Components
 {
     public class Sticky : MonoBehaviour
     {
         private bool _appliedStick;
+
+        public float Duration { get; set; }
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -22,7 +24,7 @@ namespace Trashy
 
         private IEnumerator StickTimer()
         {
-            yield return new WaitForSeconds(ConfigManager.StickyDuration.Value);
+            yield return new WaitForSeconds(Duration);
 
             GetComponent<Rigidbody>().isKinematic = false;
         }

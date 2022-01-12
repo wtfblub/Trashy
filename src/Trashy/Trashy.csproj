@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 
-    <Version>0.2.1</Version>
-    <AssemblyVersion>0.2.1</AssemblyVersion>
+    <Version>0.3.0</Version>
+    <AssemblyVersion>0.3.0</AssemblyVersion>
 
     <VTubeStudioPath></VTubeStudioPath>
   </PropertyGroup>
@@ -23,7 +23,14 @@
     <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\Unity.TextMeshPro.dll" Private="False" />
     <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.IMGUIModule.dll" Private="False" />
     <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.AssetBundleModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.TextRenderingModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\UnityEngine.AudioModule.dll" Private="False" />
     <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.PubSub.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Client.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Client.Enums.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Client.Models.dll" Private="False" />
+    <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Communication.dll" Private="False" />
     <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.dll" Private="False" />
     <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Helix.dll" Private="False" />
     <Reference Include="$(VTubeStudioPath)\VTube Studio_Data\Managed\TwitchLib.Api.Helix.Models.dll" Private="False" />

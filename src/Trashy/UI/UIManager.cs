@@ -1,14 +1,18 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Lean.Gui;
 using Lean.Transition;
 using Lean.Transition.Method;
+using Trashy.Twitch;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Trashy
+namespace Trashy.UI
 {
     public class UIManager : MonoBehaviour
     {
+        private static readonly List<Window> s_windows = new List<Window>();
         private GameObject _configSelectorIcon;
         private GameObject _configSelectorButton;
         private GameObject _configSelectorTransition;
@@ -18,12 +22,45 @@ namespace Trashy
 
         public static GUISkin Skin;
 
+        public static void AddWindow(Window window)
+        {
+            s_windows.Add(window);
+        }
+
+        public static T GetWindow<T>()
+        {
+            return s_windows.OfType<T>().FirstOrDefault();
+        }
+
+        public UIManager()
+        {
+            AddWindow(new MessageWindow());
+        }
+
         private void Start()
         {
             if (TrashyPlugin.Bundle != null)
                 Skin = TrashyPlugin.Bundle.LoadAsset<GUISkin>("Assets/TrashySkin.guiskin");
 
+            AddWindow(new GeneralConfigWindow(
+                GetComponent<SpriteManager>(),
+                GetComponent<PubSubService>(),
+                GetComponent<ChatService>()
+            ));
+            AddWindow(new TriggersWindow(GetComponent<ItemSpawner>(), GetComponent<SpriteManager>()));
             StartCoroutine(WaitForConfigWindowController());
+        }
+
+        private void OnGUI()
+        {
+            if (Skin != null)
+                GUI.skin = Skin;
+
+            foreach (var window in s_windows)
+            {
+                if (window.IsOpen)
+                    window.OnDraw();
+            }
         }
 
         private void OnDestroy()
@@ -34,6 +71,10 @@ namespace Trashy
             Destroy(_configSelectorTransition);
 
             _configWindowController.WindowTabs().Remove(_configTab);
+            foreach (var window in s_windows)
+                window.IsOpen = false;
+
+            s_windows.Clear();
         }
 
         private IEnumerator WaitForConfigWindowController()

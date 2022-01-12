@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -126,6 +125,17 @@ namespace Trashy
         public static ConfiguredTaskAwaitable<T> AnyContext<T>(this Task<T> task)
         {
             return task.ConfigureAwait(false);
+        }
+    }
+
+    public static class AsyncOperationExtensions
+    {
+        // Support await on unity AsyncOperations
+        public static TaskAwaiter GetAwaiter(this AsyncOperation asyncOp)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            asyncOp.completed += obj => tcs.SetResult(null);
+            return ((Task)tcs.Task).GetAwaiter();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Trashy.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,33 +13,40 @@ namespace Trashy
 
         private static VTubeStudioModelLoader ModelLoader => TrashyPlugin.ModelLoader;
 
+        public static readonly List<Collider> CurrentItemColliders = new List<Collider>();
+
         public ItemSpawner()
         {
             _headFinder = gameObject.GetComponent<SlowHeadFinder>();
             _spriteManager = GetComponent<SpriteManager>();
         }
 
-        private void Update()
+        public void SpawnTrash(TriggerConfig trigger)
         {
-            if (Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
-                SpawnTrash();
+            IReadOnlyList<Sprite> sprites = _spriteManager.Items;
+
+            if (!string.IsNullOrWhiteSpace(trigger.ItemGroup) &&
+                _spriteManager.Groups.TryGetValue(trigger.ItemGroup, out var groupSprites))
+            {
+                sprites = groupSprites;
+            }
+
+            SpawnTrash(trigger, sprites);
         }
 
-        public void SpawnTrash(int count = -1)
+        public void SpawnTrash(TriggerConfig trigger, IReadOnlyList<Sprite> sprites)
         {
-            if (count < 0)
-                count = ConfigManager.ObjectCount.Value;
-
             var modelPosition = ModelLoader.ModelTransformController.transform.position;
             var head = _headFinder.GetHead();
             SpawnTrash(
                 new Vector3(modelPosition.x, modelPosition.y, 20),
                 head,
-                count
+                trigger,
+                sprites
             );
         }
 
-        private void SpawnTrash(Vector3 position, Vector3 headPosition, int count)
+        private void SpawnTrash(Vector3 position, Vector3 headPosition, TriggerConfig trigger, IReadOnlyList<Sprite> sprites)
         {
             var viewport = ModelLoader.Live2DCamera.WorldToViewportPoint(headPosition);
             var spawnAdjustmentRange = new Vector3(-100, 100);
@@ -61,13 +69,12 @@ namespace Trashy
             if (viewport.x <= 0.1f)
                 layer = 8;
 
-            var colliders = new List<Collider>();
-            for (var i = 0; i < count; ++i)
+            for (var i = 0; i < trigger.ItemCount; ++i)
             {
                 var go = new GameObject();
                 go.layer = layer;
 
-                var sprite = _spriteManager.Items.Random();
+                var sprite = sprites.Random();
                 var textureSize = Math.Min(sprite.texture.width, sprite.texture.height);
                 var textureScale = ConfigManager.SpriteSize.Value / textureSize;
                 go.transform.localScale = new Vector3(textureScale, textureScale, 1);
@@ -78,12 +85,15 @@ namespace Trashy
 
                 go.AddComponent<DestroyOutOfBounds>();
 
+                if (ConfigManager.PlayHitSound.Value)
+                    go.AddComponent<PlayAudio>();
+
                 if (ConfigManager.ManipulateModel.Value)
                     go.AddComponent<ManipulateModel>();
 
-                var isSticky = ConfigManager.StickyChance.Value > 0 && Random.Range(1, 101) <= ConfigManager.StickyChance.Value;
+                var isSticky = trigger.StickyChance > 0 && Random.Range(1, 101) <= trigger.StickyChance;
                 if (isSticky)
-                    go.AddComponent<Sticky>();
+                    go.AddComponent<Sticky>().Duration = trigger.StickyDuration;
 
                 var renderer = go.AddComponent<SpriteRenderer>();
                 renderer.sprite = sprite;
@@ -108,14 +118,11 @@ namespace Trashy
                 if (!isSticky)
                     rigidbody.AddTorque(new Vector3(100, 100, 100), ForceMode.VelocityChange);
 
-                // Ignore colliders we just spawned
-                foreach (var colliderToIgnore in colliders)
-                {
+                // Ignore collision on other items
+                foreach (var colliderToIgnore in CurrentItemColliders)
                     Physics.IgnoreCollision(colliderToIgnore, collider);
-                    Physics.IgnoreCollision(collider, colliderToIgnore);
-                }
 
-                colliders.Add(collider);
+                CurrentItemColliders.Add(collider);
             }
         }
     }

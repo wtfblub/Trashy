@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace Trashy
+namespace Trashy.Components
 {
     public class ManipulateModel : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Trashy
+namespace Trashy.Components
 {
     public class DestroyOutOfBounds : MonoBehaviour
     {
@@ -14,9 +14,15 @@ namespace Trashy
         private void Update()
         {
             if (Time.realtimeSinceStartup - _spawnTime >= 5)
+            {
+                ItemSpawner.CurrentItemColliders.Remove(GetComponent<Collider>());
                 Destroy(gameObject);
+            }
             else if (transform.position.y <= -200)
+            {
+                ItemSpawner.CurrentItemColliders.Remove(GetComponent<Collider>());
                 Destroy(gameObject);
+            }
         }
     }
 }
