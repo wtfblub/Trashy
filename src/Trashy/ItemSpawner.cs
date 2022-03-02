@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Trashy.Components;
 using UnityEngine;
@@ -38,15 +39,18 @@ namespace Trashy
         {
             var modelPosition = ModelLoader.ModelTransformController.transform.position;
             var head = _headFinder.GetHead();
-            SpawnTrash(
-                new Vector3(modelPosition.x, modelPosition.y, 20),
-                head,
-                trigger,
-                sprites
+            StartCoroutine(
+                SpawnTrash(
+                    new Vector3(modelPosition.x, modelPosition.y, 20),
+                    head,
+                    trigger,
+                    sprites
+                )
             );
         }
 
-        private void SpawnTrash(Vector3 position, Vector3 headPosition, TriggerConfig trigger, IReadOnlyList<Sprite> sprites)
+        private IEnumerator SpawnTrash(Vector3 position, Vector3 headPosition, TriggerConfig trigger,
+            IReadOnlyList<Sprite> sprites)
         {
             var viewport = ModelLoader.Live2DCamera.WorldToViewportPoint(headPosition);
             var spawnAdjustmentRange = new Vector3(-100, 100);
@@ -54,8 +58,6 @@ namespace Trashy
 
             // Adjust spawn position and layer depending if the model is on the far left or right of the screen
             // example: Items should only spawn on the left if the model is on the far right
-            // Regarding layer: the live2d layer looks much better when the model is on the border of the screen
-            // because of weird camera angles
 
             if (viewport.x >= 0.8f)
                 spawnAdjustmentRange = new Vector3(-100, 0);
@@ -123,6 +125,7 @@ namespace Trashy
                     Physics.IgnoreCollision(colliderToIgnore, collider);
 
                 CurrentItemColliders.Add(collider);
+                yield return new WaitForSeconds(0.05f);
             }
         }
     }
