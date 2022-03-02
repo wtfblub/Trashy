@@ -82,7 +82,8 @@ namespace Trashy
                 go.transform.localScale = new Vector3(textureScale, textureScale, 1);
                 go.transform.position = position + new Vector3(
                     Random.Range(spawnAdjustmentRange.x, spawnAdjustmentRange.y),
-                    Random.Range(-20, 20), 0
+                    Random.Range(-20, 20),
+                    Random.Range(40, 70)
                 );
 
                 go.AddComponent<DestroyOutOfBounds>();
@@ -108,17 +109,16 @@ namespace Trashy
                 };
 
                 var rigidbody = go.AddComponent<Rigidbody>();
-                rigidbody.mass = 500;
                 rigidbody.constraints = isSticky ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
 
                 var modelTransform = ModelLoader.ModelTransformController.transform;
                 var scale = modelTransform.localScale.x;
                 var target = headPosition - new Vector3(0, Random.Range(0, 20) * scale, 0);
                 var direction = (target - go.transform.position).normalized;
-                rigidbody.AddForce(direction.x * 400, direction.y * 400, direction.z * 400, ForceMode.VelocityChange);
+                rigidbody.AddForce(direction.x * 300, direction.y * 300, direction.z * 300, ForceMode.VelocityChange);
 
-                if (!isSticky)
-                    rigidbody.AddTorque(new Vector3(100, 100, 100), ForceMode.VelocityChange);
+                // if (!isSticky)
+                    // rigidbody.AddTorque(new Vector3(100, 100, 100), ForceMode.VelocityChange);
 
                 // Ignore collision on other items
                 foreach (var colliderToIgnore in CurrentItemColliders)
