@@ -14,7 +14,7 @@ namespace Trashy
     [BepInPlugin("TrashyPlugin", "Throw trash at the VTuber", Version)]
     public class TrashyPlugin : BaseUnityPlugin
     {
-        public const string Version = "0.3.0";
+        public const string Version = "0.3.1";
 
         public static AssetBundle Bundle;
         public static VTubeStudioModelLoader ModelLoader;
