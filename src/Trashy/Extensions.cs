@@ -15,11 +15,13 @@ namespace Trashy
 
         static VTubeStudioModelLoaderExtensions()
         {
+            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Static |
+                                              BindingFlags.NonPublic | BindingFlags.Public;
             s_vtsModelFieldInfo = typeof(VTubeStudioModelLoader)
-                .GetField("vtsModel", BindingFlags.Instance | BindingFlags.NonPublic);
+                .GetField("vtsModel", bindingFlags);
 
             s_allowLoadingNextModelFieldInfo = typeof(VTubeStudioModelLoader)
-                .GetField("allowLoadingNextModel", BindingFlags.Instance | BindingFlags.NonPublic);
+                .GetField("allowLoadingNextModel", bindingFlags);
 
             if (s_vtsModelFieldInfo == null)
                 Log.Error($"Unable to find field 'vtsModel' on {nameof(VTubeStudioModelLoader)}");
