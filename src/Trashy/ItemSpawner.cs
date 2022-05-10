@@ -54,22 +54,24 @@ namespace Trashy
         {
             var viewport = ModelLoader.Live2DCamera.WorldToViewportPoint(headPosition);
             var spawnAdjustmentRange = new Vector3(-100, 100);
-            var layer = 9; // 9=UI LAYER, 8=live2d layer
 
-            // Adjust spawn position and layer depending if the model is on the far left or right of the screen
+            // Note: The virtual camera feature only renders the live2d layer
+            var layer = 8; // 9=UI LAYER, 8=live2d layer
+
+            // Adjust spawn position depending if the model is on the far left or right of the screen
             // example: Items should only spawn on the left if the model is on the far right
 
             if (viewport.x >= 0.8f)
                 spawnAdjustmentRange = new Vector3(-100, 0);
 
-            if (viewport.x >= 0.9f)
-                layer = 8;
+            // if (viewport.x >= 0.9f)
+            //     layer = 8;
 
             if (viewport.x <= 0.2f)
                 spawnAdjustmentRange = new Vector2(0, 100);
 
-            if (viewport.x <= 0.1f)
-                layer = 8;
+            // if (viewport.x <= 0.1f)
+            //     layer = 8;
 
             for (var i = 0; i < trigger.ItemCount; ++i)
             {
