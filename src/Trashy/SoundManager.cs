@@ -13,9 +13,9 @@ namespace Trashy
     {
         private const int MaxSounds = 6;
 
+        private static readonly List<AudioClip> s_audioClips = new List<AudioClip>();
         private static readonly Queue<AudioSource> s_queue = new Queue<AudioSource>();
         private static readonly List<AudioSource> s_active = new List<AudioSource>();
-        private static AudioClip s_audioClip;
         private static float s_lastPlay;
 
         public static void Play()
@@ -24,10 +24,12 @@ namespace Trashy
             if (Time.realtimeSinceStartup - s_lastPlay < 0.05f)
                 return;
 
-            if (s_queue.Count > 0 && s_audioClip != null)
+            if (s_queue.Count > 0 && s_audioClips.Count > 0)
             {
+                // Pick audio clip at random
+                var audioClip = s_audioClips.Random();
                 var audioSource = s_queue.Dequeue();
-                audioSource.clip = s_audioClip;
+                audioSource.clip = audioClip;
                 audioSource.volume = ConfigManager.HitSoundVolume.Value / 100f;
                 audioSource.Play();
                 s_active.Add(audioSource);
@@ -35,7 +37,31 @@ namespace Trashy
             }
         }
 
-        public static async Task LoadAudioClip()
+        private static async Task<AudioClip> LoadClip(string fileName)
+        {
+            // Get audio type from file name
+            var audioType = AudioTypeForFile(fileName);
+            if (audioType == AudioType.UNKNOWN)
+            {
+                Log.Error<SoundManager>($"Unable to detect format for audio file: {fileName}");
+                return null;
+            }
+
+            // Load file
+            var request = UnityWebRequestMultimedia.GetAudioClip(
+                new Uri(fileName),
+                audioType
+            );
+            await request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Log.Error<SoundManager>($"Unable to load audio file: {fileName}");
+                return null;
+            }
+            return DownloadHandlerAudioClip.GetContent(request);
+        }
+
+        public static async Task LoadAudioClips()
         {
             foreach (var audioSource in s_active)
             {
@@ -46,32 +72,27 @@ namespace Trashy
 
             s_active.Clear();
 
-            if (s_audioClip != null)
+            // Unload all audio clips
+            if (s_audioClips.Count > 0)
             {
-                AudioClip.Destroy(s_audioClip);
-                s_audioClip = null;
+                foreach (var audioClip in s_audioClips)
+                    AudioClip.Destroy(audioClip);
+                s_audioClips.Clear();
             }
 
-            var fileName = Path.Combine(Paths.PluginPath, "Trashy", "hit.mp3");
-            if (!File.Exists(fileName))
-                return;
-
-            using (var request = UnityWebRequestMultimedia.GetAudioClip(
-                       new Uri(fileName),
-                       AudioType.MPEG
-                   ))
+            var itemsDirectory = Path.Combine(Paths.PluginPath, "Trashy", "Sounds");
+            foreach (var file in Directory.GetFiles(itemsDirectory, "*.*"))
             {
-                await request.SendWebRequest();
-                if (request.result != UnityWebRequest.Result.Success)
-                    Log.Error<SoundManager>("Unable to load hit.mp3");
-                else
-                    s_audioClip = DownloadHandlerAudioClip.GetContent(request);
+                // Load audio clip and add it to the list
+                var clip = await LoadClip(file);
+                if (clip)
+                    s_audioClips.Add(clip);
             }
         }
 
         private async void Start()
         {
-            await LoadAudioClip();
+            await LoadAudioClips();
             for (var i = 0; i < MaxSounds; ++i)
             {
                 var audioSource = gameObject.AddComponent<AudioSource>();
@@ -91,6 +112,21 @@ namespace Trashy
                     s_active.Remove(audioSource);
                     s_queue.Enqueue(audioSource);
                 }
+            }
+        }
+
+        private static AudioType AudioTypeForFile(string fileName)
+        {
+
+            var extension = Path.GetExtension(fileName);
+            switch (extension)
+            {
+                case ".wav": return AudioType.WAV;
+                case ".mp3": return AudioType.MPEG;
+                case ".ogg": return AudioType.OGGVORBIS;
+                case ".aiff": case ".aif": return AudioType.AIFF;
+                default:
+                    return AudioType.UNKNOWN;
             }
         }
     }
