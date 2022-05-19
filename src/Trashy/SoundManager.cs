@@ -48,17 +48,17 @@ namespace Trashy
             }
 
             // Load file
-            var request = UnityWebRequestMultimedia.GetAudioClip(
-                new Uri(fileName),
-                audioType
-            );
-            await request.SendWebRequest();
-            if (request.result != UnityWebRequest.Result.Success)
+            using (var request = UnityWebRequestMultimedia.GetAudioClip(new Uri(fileName), audioType))
             {
-                Log.Error<SoundManager>($"Unable to load audio file: {fileName}");
-                return null;
+                await request.SendWebRequest();
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Log.Error<SoundManager>($"Unable to load audio file: {fileName}");
+                    return null;
+                }
+
+                return DownloadHandlerAudioClip.GetContent(request);
             }
-            return DownloadHandlerAudioClip.GetContent(request);
         }
 
         public static async Task LoadAudioClips()
