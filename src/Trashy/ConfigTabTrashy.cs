@@ -23,6 +23,8 @@ namespace Trashy
             setIsSelected(selectedTab);
             CanvasGroup.alpha = isSelected ? 1 : 0;
             UIManager.GetWindow<GeneralConfigWindow>().IsOpen = isSelected;
+            if (!isSelected)
+                GUILayoutEx.ClosePopup();
         }
 
         public override void SetPlatformLayout(RuntimePlatform platform)

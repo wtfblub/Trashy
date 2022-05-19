@@ -8,6 +8,12 @@ namespace Trashy.UI
         private static PopupWindow s_popupWindow;
         private static GUIStyle s_popupStyle;
 
+        public static void ClosePopup()
+        {
+            if (s_popupWindow != null)
+                s_popupWindow.IsOpen = false;
+        }
+
         public static bool Popup(ref int selectedIndex, string[] items)
         {
             if (s_popupWindow == null)
