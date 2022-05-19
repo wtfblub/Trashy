@@ -100,8 +100,8 @@ namespace Trashy.UI
                 if (GUILayout.Button("Reload Items"))
                     _spriteManager.Load();
 
-                if (GUILayout.Button("Reload hit sound"))
-                    await SoundManager.LoadAudioClip();
+                if (GUILayout.Button("Reload hit sounds"))
+                    await SoundManager.LoadAudioClips();
 
                 if (TwitchAuth.IsValidating)
                 {

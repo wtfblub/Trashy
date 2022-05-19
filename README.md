@@ -53,8 +53,7 @@ After logging in it should look like this:
 
 - *Reaction power:* How strong your model will react
 
-- *Play hit sound:* If a sound effect should be played when items hit your model
-  * Trashy loads the hit sound effect from `VTube Studio\BepInEx\plugins\Trashy\hit.mp3` Simply replace the file with any mp3 and press `Reload hit sound` in the Trashy settings
+- *Play hit sound:* If enabled, a sound effect will be played when items hit your model
 
 ### Setting up triggers
 
@@ -107,3 +106,16 @@ Groups are made by creating folders in `VTube Studio\BepInEx\plugins\Trashy\Item
 Example: Create a folder `pokemon` in `VTube Studio\BepInEx\plugins\Trashy\Items` and drop some png files into the `pokemon` folder. Now you have the group `pokemon` available in the trigger settings and it will only throw items from the `pokemon` folder.
 
 Make sure to click on `Reload Items` in the settings after adding or changing png files.
+
+### Additional hit sounds
+
+Trashy comes with a default hit sound, but you can replace it and/or add other sounds by just adding files to the `VTube Studio\BepInEx\plugins\Trashy\Sounds` folder, provided they are in one of these supported formats:
+
+ - `.mp3` MPEG Layer 3
+ - `.ogg` Ogg Vorbis (not Opus!)
+ - `.wav` Microsoft Wave
+ - `.aiff` Audio Interchange File Format
+
+Which sound is played when hit is chosen at random.
+
+If you add/remove sounds while VTube Studio is open, remember to click `Reload hit sounds` to apply the changes.
