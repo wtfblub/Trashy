@@ -77,11 +77,12 @@ namespace Trashy
             {
                 foreach (var audioClip in s_audioClips)
                     AudioClip.Destroy(audioClip);
+
                 s_audioClips.Clear();
             }
 
-            var itemsDirectory = Path.Combine(Paths.PluginPath, "Trashy", "Sounds");
-            foreach (var file in Directory.GetFiles(itemsDirectory, "*.*"))
+            var soundsDirectory = Path.Combine(Paths.PluginPath, "Trashy", "Sounds");
+            foreach (var file in Directory.GetFiles(soundsDirectory, "*.*"))
             {
                 // Load audio clip and add it to the list
                 var clip = await LoadClip(file);
@@ -117,14 +118,22 @@ namespace Trashy
 
         private static AudioType AudioTypeForFile(string fileName)
         {
-
             var extension = Path.GetExtension(fileName);
-            switch (extension)
+            switch (extension.ToLower())
             {
-                case ".wav": return AudioType.WAV;
-                case ".mp3": return AudioType.MPEG;
-                case ".ogg": return AudioType.OGGVORBIS;
-                case ".aiff": case ".aif": return AudioType.AIFF;
+                case ".wav":
+                    return AudioType.WAV;
+
+                case ".mp3":
+                    return AudioType.MPEG;
+
+                case ".ogg":
+                    return AudioType.OGGVORBIS;
+
+                case ".aiff":
+                case ".aif":
+                    return AudioType.AIFF;
+
                 default:
                     return AudioType.UNKNOWN;
             }
