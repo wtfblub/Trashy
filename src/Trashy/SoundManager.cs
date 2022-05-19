@@ -93,6 +93,7 @@ namespace Trashy
 
         private async void Start()
         {
+            Migrate1();
             await LoadAudioClips();
             for (var i = 0; i < MaxSounds; ++i)
             {
@@ -137,6 +138,26 @@ namespace Trashy
                 default:
                     return AudioType.UNKNOWN;
             }
+        }
+
+        private static void Migrate1()
+        {
+            // Migrate from 0.3.3
+            // Sounds are now in Trashy/Sounds, move old hit.mp3 to that directory
+
+            var fileName = Path.Combine(Paths.PluginPath, "Trashy", "hit.mp3");
+            if (!File.Exists(fileName))
+                return;
+
+            var soundsDirectory = Path.Combine(Paths.PluginPath, "Trashy", "Sounds");
+            if (!Directory.Exists(soundsDirectory))
+                Directory.CreateDirectory(soundsDirectory);
+
+            var newFileName = Path.Combine(soundsDirectory, "hit.mp3");
+            if (File.Exists(newFileName))
+                File.Delete(newFileName);
+
+            File.Move(fileName, Path.Combine(soundsDirectory, "hit.mp3"));
         }
     }
 }

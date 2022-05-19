@@ -113,6 +113,9 @@ namespace Trashy
             if (list.Count == 0)
                 return default;
 
+            if (list.Count == 1)
+                return list[0];
+
             return list[UnityEngine.Random.Range(0, list.Count)];
         }
     }
