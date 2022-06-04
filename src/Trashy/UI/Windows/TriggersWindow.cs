@@ -10,13 +10,15 @@ namespace Trashy.UI
         private readonly ItemSpawner _itemSpawner;
         private readonly SpriteManager _spriteManager;
         private Vector2 _scrollPosition;
-        private string[] _triggerTypeNames;
+        private readonly string[] _triggerTypeNames;
+        private readonly string[] _commandRestrictionNames;
 
         public TriggersWindow(ItemSpawner itemSpawner, SpriteManager spriteManager)
         {
             _itemSpawner = itemSpawner;
             _spriteManager = spriteManager;
             _triggerTypeNames = Enum.GetNames(typeof(TriggerType));
+            _commandRestrictionNames = Enum.GetNames(typeof(CommandRestriction));
         }
 
         public override void OnDraw()
@@ -40,7 +42,7 @@ namespace Trashy.UI
                     GUILayout.FlexibleSpace();
                     var selected = 0;
                     var clicked = GUILayoutEx.DropDownButton(
-                        "Add trigger",
+                        "  Add trigger  ",
                         ref selected,
                         _triggerTypeNames,
                         GUILayout.ExpandWidth(false)
@@ -126,6 +128,45 @@ namespace Trashy.UI
                                 config.MinAmount = (int)newValue;
                                 saveConfig = true;
                             }
+                        }
+                    });
+                    break;
+
+                case TriggerType.Command:
+                    GUILayoutEx.NewConfigEntry("Command Name:", () =>
+                    {
+                        var newName = GUILayout.TextField(config.CommandName);
+                        if (!config.CommandName.Equals(newName))
+                        {
+                            config.CommandName = newName;
+                            saveConfig = true;
+                        }
+                    });
+
+                    GUILayoutEx.NewConfigEntry("Cooldown in seconds:", () =>
+                    {
+                        var newValueStr = GUILayout.TextField(config.CommandCooldown.ToString());
+                        if (uint.TryParse(newValueStr, out var newValue))
+                        {
+                            if (config.CommandCooldown != newValue)
+                            {
+                                config.CommandCooldown = (int)newValue;
+                                saveConfig = true;
+                            }
+                        }
+                    });
+
+                    GUILayoutEx.NewConfigEntry("Command restriction:", () =>
+                    {
+                        var preview = config.CommandRestriction.ToString();
+                        var selectedIndex = 0;
+                        if (GUILayoutEx.DropDownButton(preview, ref selectedIndex, _commandRestrictionNames))
+                        {
+                            config.CommandRestriction = (CommandRestriction)Enum.Parse(
+                                typeof(CommandRestriction),
+                                _commandRestrictionNames[selectedIndex]
+                            );
+                            saveConfig = true;
                         }
                     });
                     break;

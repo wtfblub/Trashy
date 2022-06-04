@@ -12,7 +12,16 @@ namespace Trashy
         Redeem,
         Bits,
         Sub,
-        GiftSub
+        GiftSub,
+        Command
+    }
+
+    public enum CommandRestriction
+    {
+        Everyone,
+        Subscriber,
+        Vip,
+        Moderator
     }
 
     public class TriggerConfig
@@ -21,12 +30,18 @@ namespace Trashy
         public TriggerType Type;
         public string RedeemName = "";
         public int MinAmount = 10;
+        public string CommandName = "!throw";
+        public int CommandCooldown = 60;
+        public CommandRestriction CommandRestriction = CommandRestriction.Everyone;
 
         public int ItemCount = 10;
         public int StickyChance = 25;
         public float StickyDuration = 0.5f;
 
         public string ItemGroup = "";
+
+        [JsonIgnore]
+        public DateTimeOffset CommandLastTrigger;
     }
 
     public static class ConfigManager

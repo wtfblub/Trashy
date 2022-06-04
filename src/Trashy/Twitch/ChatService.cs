@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BepInEx;
@@ -112,16 +113,54 @@ namespace Trashy.Twitch
 
         private void OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Bits <= 0)
-                return;
-
-            foreach (var trigger in ConfigManager.Triggers.Where(x => x.Enabled && x.Type == TriggerType.Bits))
+            foreach (var trigger in ConfigManager.Triggers.Where(x => x.Enabled && x.Type == TriggerType.Command))
             {
-                if (e.ChatMessage.Bits >= trigger.MinAmount)
+                if (!e.ChatMessage.Message.ToLower().StartsWith(trigger.CommandName.ToLower()))
+                    continue;
+
+                var allowTrigger = false;
+                switch (trigger.CommandRestriction)
                 {
-                    ThreadingHelper.Instance.StartSyncInvoke(() =>
-                        _itemSpawner.SpawnTrash(trigger)
-                    );
+                    case CommandRestriction.Everyone:
+                        allowTrigger = true;
+                        break;
+
+                    case CommandRestriction.Subscriber:
+                        allowTrigger = e.ChatMessage.IsSubscriber || e.ChatMessage.IsVip ||
+                                       e.ChatMessage.IsModerator || e.ChatMessage.IsBroadcaster;
+                        break;
+
+                    case CommandRestriction.Vip:
+                        allowTrigger = e.ChatMessage.IsVip ||
+                                       e.ChatMessage.IsModerator || e.ChatMessage.IsBroadcaster;
+                        break;
+
+                    case CommandRestriction.Moderator:
+                        allowTrigger = e.ChatMessage.IsModerator || e.ChatMessage.IsBroadcaster;
+                        break;
+                }
+
+                var isOnCooldown = DateTimeOffset.Now - trigger.CommandLastTrigger <
+                                   TimeSpan.FromSeconds(trigger.CommandCooldown);
+
+                // Broadcaster bypasses the cooldown
+                if (allowTrigger && (!isOnCooldown || e.ChatMessage.IsBroadcaster))
+                {
+                    trigger.CommandLastTrigger = DateTimeOffset.Now;
+                    ThreadingHelper.Instance.StartSyncInvoke(() => _itemSpawner.SpawnTrash(trigger));
+                }
+            }
+
+            if (e.ChatMessage.Bits > 0)
+            {
+                foreach (var trigger in ConfigManager.Triggers.Where(x => x.Enabled && x.Type == TriggerType.Bits))
+                {
+                    if (e.ChatMessage.Bits >= trigger.MinAmount)
+                    {
+                        ThreadingHelper.Instance.StartSyncInvoke(() =>
+                            _itemSpawner.SpawnTrash(trigger)
+                        );
+                    }
                 }
             }
         }

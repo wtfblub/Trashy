@@ -76,6 +76,11 @@ Click on `Add trigger` and choose the type of trigger you want.
 - **GiftSub:** A gifted subscription or community gifted subscriptions
   * *Note:* This will get triggered for each community gifted subscription. Example: If someone gifts 100 subscriptions it will trigger 100 times
 
+- **Command:** A chat command
+  * *Command name:* The chat command, defaults to `!throw`
+  * *Cooldown:* How many seconds need to pass before the command can be used again(Broadcaster has no cooldown)
+  * *Command restriction:* Who is allowed to use the command. Subscriber: subs, vips, mods - Vip: vips, mods etc 
+
 **Other trigger settings:**
 - *Enabled:* If the trigger is active or not
 

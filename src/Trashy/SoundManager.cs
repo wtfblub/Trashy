@@ -157,7 +157,7 @@ namespace Trashy
             if (File.Exists(newFileName))
                 File.Delete(newFileName);
 
-            File.Move(fileName, Path.Combine(soundsDirectory, "hit.mp3"));
+            File.Move(fileName, newFileName);
         }
     }
 }
