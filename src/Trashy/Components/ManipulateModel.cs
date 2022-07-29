@@ -7,43 +7,43 @@ namespace Trashy.Components
 {
     public class ManipulateModel : MonoBehaviour
     {
-        private static readonly Func<List<APITrackingDataParam>, Tuple<string, string>> s_injectData;
+        private static readonly Action<List<APITrackingDataParamRequest>> s_injectData;
 
         private bool _applied;
         private Vector3 _initialPosition;
 
         static ManipulateModel()
         {
-            var fi = typeof(Executor_InjectParameterDataRequest).GetField(
-                "apiTrackingData",
+            var fi = typeof(VTubeStudioAPI).GetField(
+                "executors",
                 BindingFlags.Static | BindingFlags.NonPublic
             );
             if (fi == null)
             {
-                Log.Error<ManipulateModel>("Unable to find field 'apiTrackingData'");
+                Log.Error<ManipulateModel>("Unable to find field 'VTubeStudioAPI.executors'");
                 return;
             }
 
-            var apiTrackingData = (APITrackingData)fi.GetValue(null);
-            if (apiTrackingData == null)
+            var apiExecutors = (APIExecutors)fi.GetValue(null);
+            if (apiExecutors == null)
             {
-                Log.Error<ManipulateModel>("apiTrackingData is null");
+                Log.Error<ManipulateModel>("VTubeStudioAPI.executors is null");
                 return;
             }
 
-            var mi = typeof(APITrackingData).GetMethod(
-                "NewTrackingDataArrived",
+            var mi = typeof(Executor_InjectParameterDataRequest).GetMethod(
+                "applyNewAPITrackingData",
                 BindingFlags.Instance | BindingFlags.NonPublic
             );
             if (mi == null)
             {
-                Log.Error<ManipulateModel>("Unable to find method 'NewTrackingDataArrived'");
+                Log.Error<ManipulateModel>("Unable to find method 'Executor_InjectParameterDataRequest.applyNewAPITrackingData'");
                 return;
             }
 
-            s_injectData = (Func<List<APITrackingDataParam>, Tuple<string, string>>)mi.CreateDelegate(
-                typeof(Func<List<APITrackingDataParam>, Tuple<string, string>>),
-                apiTrackingData
+            s_injectData = (Action<List<APITrackingDataParamRequest>>)mi.CreateDelegate(
+                typeof(Action<List<APITrackingDataParamRequest>>),
+                apiExecutors.ExecutorInstance_InjectParameterDataRequest
             );
         }
 
@@ -69,9 +69,9 @@ namespace Trashy.Components
 
         private static void Manipulate(string id, float value, float weight, float time)
         {
-            s_injectData(new List<APITrackingDataParam>
+            s_injectData(new List<APITrackingDataParamRequest>
             {
-                new APITrackingDataParam(id, "Trashy", false, value, weight, time)
+                new APITrackingDataParamRequest(id, InjectParameterDataMode.add, "Trashy", false, value, weight, time)
             });
         }
     }
