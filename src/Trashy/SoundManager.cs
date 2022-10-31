@@ -11,7 +11,7 @@ namespace Trashy
 {
     public class SoundManager : MonoBehaviour
     {
-        private const int MaxSounds = 6;
+        private const int MaxSounds = 10;
 
         private static readonly List<AudioClip> s_audioClips = new List<AudioClip>();
         private static readonly Queue<AudioSource> s_queue = new Queue<AudioSource>();

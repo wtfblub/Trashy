@@ -99,6 +99,8 @@ namespace Trashy
                 var isSticky = trigger.StickyChance > 0 && Random.Range(1, 101) <= trigger.StickyChance;
                 if (isSticky)
                     go.AddComponent<Sticky>().Duration = trigger.StickyDuration;
+                else
+                    go.AddComponent<SlowDownOnCollision>();
 
                 var renderer = go.AddComponent<SpriteRenderer>();
                 renderer.sprite = sprite;
@@ -127,7 +129,7 @@ namespace Trashy
                     Physics.IgnoreCollision(colliderToIgnore, collider);
 
                 CurrentItemColliders.Add(collider);
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(Random.Range(0.01f, 0.1f));
             }
         }
     }
