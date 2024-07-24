@@ -1,3 +1,5 @@
+**This plugin is no longer maintained**
+
 # Trashy
 A [VTube Studio](https://denchisoft.com/) mod that lets your Twitch Viewers throw items at you.
 
@@ -27,8 +29,13 @@ Simply download the BepInEx 5 64bit package from [here](https://github.com/BepIn
 1. Download the latest release from [here](https://github.com/wtfblub/Trashy/releases)
 2. Extract the contents to `VTube Studio\BepInEx\plugins`
     *Just create the plugins folder if its missing*
+3. Start VTube Studio and then close it after it has loaded
+4. **(Step 3 is required for this file to exist)** Go to `VTube Studio\BepInEx\config` and open the `BepInEx.cfg` file in notepad then search for `HideManagerGameObject` and change `false` to `true` then save the file. The line should look like this
+```ini
+HideManagerGameObject = true
+```
 
-Open VTube Studio and go to the settings, you should find the new Trashy Icon on the top bar:
+Open VTube Studio again and go to the settings, you should find the new Trashy Icon on the top bar:
 
 ![](https://github.com/wtfblub/Trashy/raw/dev/media/trashy_config_icon.png)
 
