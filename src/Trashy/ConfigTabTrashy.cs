@@ -18,6 +18,19 @@ namespace Trashy
             // Overwrite ConfigWindowTab.Awake since our gameobject does not have the Components this is looking for
         }
 
+        public override float GetScrollPos()
+        {
+            return 0.0f;
+        }
+
+        public override void OnScrollRectMoved(Vector2 newScrollRectPos)
+        {
+        }
+
+        public override void UpdateScrollUpDownButtons()
+        {
+        }
+
         public override void Initialize(int selectedTab)
         {
             setIsSelected(selectedTab);

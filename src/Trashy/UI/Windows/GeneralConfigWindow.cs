@@ -101,7 +101,15 @@ namespace Trashy.UI
                     _spriteManager.Load();
 
                 if (GUILayout.Button("Reload hit sounds"))
-                    await SoundManager.LoadAudioClips();
+                {
+                    _ = SoundManager.LoadAudioClips().ContinueWith(t =>
+                    {
+                        if (t.IsFaulted)
+                            Log.Error<GeneralConfigWindow>(
+                                $"Failed to load audio clips: {string.Join("\n", t.Exception.Flatten().InnerExceptions)}"
+                            );
+                    });
+                }
 
                 if (TwitchAuth.IsValidating)
                 {
