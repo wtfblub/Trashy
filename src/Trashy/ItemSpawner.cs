@@ -107,7 +107,7 @@ namespace Trashy
                 renderer.sortingOrder = 1100;
 
                 var collider = go.AddComponent<SphereCollider>();
-                collider.material = new PhysicMaterial
+                collider.material = new PhysicsMaterial
                 {
                     bounciness = 0.0f
                 };
